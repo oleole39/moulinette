@@ -22,6 +22,7 @@ import argparse
 import locale
 import logging
 import os
+import re
 import sys
 import tempfile
 from collections import OrderedDict
@@ -188,6 +189,24 @@ def pretty_date(_date):
         return _date.strftime("%Y-%m-%d")
 
 
+def natural_sort(elements):
+    """Sort a list by natural sort order
+
+    Returns a sorted list treating numbers as numeric values
+    (cf. https://en.wikipedia.org/wiki/Natural_sort_order),
+    and ignoring lowercase/uppercase order.
+
+    Code adapted from Mark Byers' published under CC-BY-SA license at
+    https://stackoverflow.com/questions/4836710/is-there-a-built-in-function-for-string-natural-sort/4836734#4836734
+
+    Keyword arguments:
+        - l -- The list to sort
+    """
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', str(key))]
+    return sorted(elements, key=alphanum_key)
+
+
 def pretty_print_dict(d, depth=0):
     """Print in a pretty way a dictionary recursively
 
@@ -200,7 +219,7 @@ def pretty_print_dict(d, depth=0):
     """
     keys = d.keys()
     if not isinstance(d, OrderedDict):
-        keys = sorted(keys)
+        keys = natural_sort(keys)
     for k in keys:
         v = d[k]
         k = colorize(str(k), "purple")
