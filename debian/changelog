@@ -32,6 +32,26 @@ moulinette (13.0.2) testing; urgency=medium
 
  -- Tagada <tagada@yunohost.org>  Fri, 04 Sep 2026 01:37:31 +0200
 
+moulinette (12.1.6) stable; urgency=low
+
+  - workflows: build: allow archive (3bc1f6b4)
+
+ -- Félix Piédallu <felix@piedallu.me>  Fri, 13 Nov 2026 11:20:50 +0100
+
+moulinette (12.1.5) stable; urgency=low
+
+  - maintenance: make executable make_changelog.sh (4eb57af8)
+  - Move maintenance scripts from tests/ to maintenance/ (a40755d7)
+  - workflows: Rename tox as tests (b551cdf3)
+  - workflows: Merge formatting workflows to format.yml (bf40da04)
+  - workflows: Add build workflow (e1326cb9)
+  - workflows: build: Fix uses for yunohost-ci action (a1298431)
+  - i18n: Translations updated for Hungarian, Kabyle, Turkish
+
+  Thanks to all contributors <3 ! (ButterflyOfFire, Simon F, Tekhne)
+
+ -- Salamandar <felix@piedallu.me>  Fri, 13 Nov 2026 11:16:19 +0100
+
 moulinette (12.1.4) stable; urgency=medium
 
   - actionsmap: allow to bind YAML references for arguments in the actionsmap (339c99d5)
