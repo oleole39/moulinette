@@ -18,10 +18,10 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import os
-import time
 import json
 import logging
+import os
+import time
 from typing import Any
 
 import moulinette
@@ -100,7 +100,9 @@ class Translator:
     def key_exists(self, key) -> bool:
         return key in self._translations[self.default_locale]
 
-    def translate(self, key: str, *args: Any, **kwargs: Any) -> str:
+    def translate(
+        self, key: str, *args: Any, noformat: bool = False, **kwargs: Any
+    ) -> str:
         """Retrieve proper translation for a key
 
         Attempt to retrieve translation for a key using the current locale
@@ -108,12 +110,16 @@ class Translator:
 
         Keyword arguments:
             - key -- The key to translate
+            - noformat -- Do not format the string
 
         """
         failed_to_format = False
         if key in self._translations.get(self.locale, {}):
+            translated = self._translations[self.locale][key]
+            if noformat:
+                return translated
             try:
-                return self._translations[self.locale][key].format(*args, **kwargs)
+                return translated.format(*args, **kwargs)
             except Exception as e:
                 unformatted_string = self._translations[self.locale][key]
                 error_message = (
@@ -132,10 +138,11 @@ class Translator:
             self.default_locale != self.locale
             and key in self._translations.get(self.default_locale, {})
         ):
+            translated = self._translations[self.default_locale][key]
+            if noformat:
+                return translated
             try:
-                return self._translations[self.default_locale][key].format(
-                    *args, **kwargs
-                )
+                return translated.format(*args, **kwargs)
             except Exception as e:
                 unformatted_string = self._translations[self.default_locale][key]
                 error_message = (
@@ -239,7 +246,7 @@ class Moulinette18n:
         """
         return self._global.translate(key, *args, **kwargs)
 
-    def n(self, key: str, *args: Any, **kwargs: Any) -> str:
+    def n(self, key: str, *args: Any, noformat: bool = False, **kwargs: Any) -> str:
         """Retrieve proper translation for a moulinette key
 
         Attempt to retrieve value for a key from current loaded namespace
@@ -248,9 +255,10 @@ class Moulinette18n:
 
         Keyword arguments:
             - key -- The key to translate
+            - noformat -- Do not format the string
 
         """
-        return self.translator.translate(key, *args, **kwargs)
+        return self.translator.translate(key, *args, noformat=noformat, **kwargs)
 
     def key_exists(self, key: str) -> bool:
         """Check if a key exists in the translation files
